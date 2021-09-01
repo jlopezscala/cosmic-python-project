@@ -1,2 +1,8 @@
 .idea
 .venv
+
+chapter01-domain-modeling/app/__pycache__/
+chapter01-domain-modeling/__pycache__/
+chapter01-domain-modeling/tests/__pycache__/
+*.py[cod]
+*$py.class

@@ -28,7 +28,7 @@ class Batch:
         return self._purchased_quantity - self.allocated_quantity
 
     def allocate(self, order_line: OrderLine):
-        if self.can_allocate():
+        if self.can_allocate(order_line):
             self._allocations.add(order_line)
 
     def can_allocate(self, order_line: OrderLine) -> bool:
