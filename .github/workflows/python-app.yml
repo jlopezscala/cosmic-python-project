@@ -28,5 +28,5 @@ jobs:
         poetry install
     - name: Test with pytest
       run: |
-        chapter01-domain-modeling
+        cd chapter01-domain-modeling
         poetry run pytest
