@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from app.model import model
+from model import model
 
 
 class AbstractRepository(ABC):
