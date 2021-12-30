@@ -1,3 +1,5 @@
+# More on setup.py modules here: https://hynek.me/articles/testing-packaging/
+
 from setuptools import setup
 
 setup(

@@ -1,3 +1,6 @@
+
+# Worth checking out: https://pythonspeed.com/docker to build better Dockerfiles
+
 FROM python:3.9-slim-buster
 # Using Slim-buster and not Alpine because of: https://pythonspeed.com/articles/alpine-docker-python/
 # Also Pypi wheels don't work in Alpine
