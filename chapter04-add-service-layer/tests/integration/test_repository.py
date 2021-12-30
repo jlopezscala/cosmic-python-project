@@ -1,5 +1,5 @@
-from app import repository
-from app.model import model
+from src.allocation.adapters import repository
+from src.allocation.domain import model
 
 
 def test_repository_can_save_batch(session):
