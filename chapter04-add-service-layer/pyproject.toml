@@ -6,7 +6,9 @@ authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+flask = "2.0.2"
 SQLAlchemy = "^1.4.26"
+psycopg2-binary = "2.9.3"
 requests = "^2.26.0"
 
 
@@ -14,5 +16,5 @@ requests = "^2.26.0"
 pytest = "^6.2.5"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core==1.1.12"]
 build-backend = "poetry.core.masonry.api"
