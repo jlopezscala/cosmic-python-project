@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -7,6 +9,7 @@ from ..adapters import orm, repository
 from flask import Flask, request, jsonify
 
 from ..domain import model
+from ..services import services
 
 orm.start_mappers()
 get_session = sessionmaker(bind=create_engine(config.get_postgres_uri()))
@@ -22,7 +25,9 @@ def allocate():
         request.json["sku"],
         request.json["qty"],
     )
+    try:
+        batch_ref = services.allocate(line, batches)
+    except (model.OutOfStockError, services.InvalidSku) as err:
+        return jsonify({f"message": str(err)}), HTTPStatus.BAD_REQUEST
 
-    batch_ref = model.allocate(line, batches)
-
-    return jsonify({"batch_ref": batch_ref}), 201
+    return jsonify({"batch_ref": batch_ref}), HTTPStatus.CREATED
