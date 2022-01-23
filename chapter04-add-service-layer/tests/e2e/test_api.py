@@ -50,3 +50,38 @@ def test_allocations_are_persisted(add_stock, random_uuid):
     r = requests.post(f"{url}/allocate", json=line2)
     assert r.status_code == HTTPStatus.CREATED
     assert r.json()["batch_ref"] == batch2
+
+
+@pytest.mark.usefixtures("restart_api")
+def test_400_message_out_of_stock(add_stock, random_uuid):
+    small_batch, large_order = random_uuid(), random_uuid()
+    sku = random_uuid()
+
+    add_stock([
+        (small_batch, sku, 10, "2011-01-01"),
+    ])
+    data = {
+        "order_id": large_order, "sku": sku, "qty": 3
+    }
+    url = config.get_api_url()
+    r = requests.post(f"{url}/allocate", json=data)
+    assert r.status_code == HTTPStatus.BAD_REQUEST
+    assert r.json()["message" == f"Out of stock for sku {sku}"]
+
+
+@pytest.mark.usefixtures("restart_api")
+def test_400_message_invalid_sku(add_stock, random_uuid):
+    unknown_sku, order_id = random_uuid(), random_uuid()
+
+    add_stock([
+        (order_id, unknown_sku, 10, "2011-01-01"),
+    ])
+    data = {
+        "order_id": order_id, "sku": unknown_sku, "qty": 3
+    }
+    url = config.get_api_url()
+    r = requests.post(f"{url}/allocate", json=data)
+    assert r.status_code == HTTPStatus.BAD_REQUEST
+    assert r.json()["message" == f"Invalid sku {unknown_sku}"]
+
+
