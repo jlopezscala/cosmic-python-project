@@ -7,7 +7,7 @@ class OutOfStockError(Exception):
     pass
 
 
-@dataclass(frozen=True)
+@dataclass(unsafe_hash=True)
 class OrderLine:
     order_id: str
     sku: str
@@ -15,7 +15,6 @@ class OrderLine:
 
 
 class Batch:
-
     def __init__(self, reference: str, sku: str, eta: datetime, quantity: int):
         self.reference = reference
         self.sku = sku
@@ -36,7 +35,10 @@ class Batch:
             self._allocations.add(order_line)
 
     def can_allocate(self, order_line: OrderLine) -> bool:
-        return order_line.sku == self.sku and order_line.quantity <= self.available_quantity
+        return (
+            order_line.sku == self.sku
+            and order_line.quantity <= self.available_quantity
+        )
 
     def deallocate(self, order_line: OrderLine):
         if order_line in self._allocations:
@@ -63,9 +65,7 @@ class Batch:
 
 def allocate(line: OrderLine, batches: List[Batch]):
     try:
-        batch = next(
-            batch for batch in sorted(batches) if batch.can_allocate(line)
-        )
+        batch = next(batch for batch in sorted(batches) if batch.can_allocate(line))
     except StopIteration:
         raise OutOfStockError(f"Out of stock for SKU {line.sku}")
     batch.allocate(line)

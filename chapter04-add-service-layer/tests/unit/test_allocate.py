@@ -10,8 +10,12 @@ later = tomorrow + timedelta(days=10)
 
 def test_prefers_current_stock_batches_to_shipments():
     # Given
-    in_stock_batch = Batch("in-stock-batch", sku="RETRO_CLOCK", quantity=100, eta=None)
-    shipment_batch = Batch("shipment-batch", sku="RETRO_CLOCK", quantity=100, eta=None)
+    in_stock_batch = Batch(
+        "in-stock-batch", sku="RETRO_CLOCK", quantity=100, eta=None
+    )
+    shipment_batch = Batch(
+        "shipment-batch", sku="RETRO_CLOCK", quantity=100, eta=None
+    )
     line = OrderLine("oref", "RETRO_CLOCK", 10)
 
     # When
@@ -41,7 +45,9 @@ def test_prefers_earlier_batches():
 def test_returns_allocated_batch_ref():
     # Given
     in_stock = Batch("in-stock-batch", sku="RETRO_CLOCK", quantity=100, eta=None)
-    shipment_batch = Batch("shipment-batch", sku="RETRO_CLOCK", quantity=100, eta=None)
+    shipment_batch = Batch(
+        "shipment-batch", sku="RETRO_CLOCK", quantity=100, eta=None
+    )
     line = OrderLine("oref", "RETRO_CLOCK", 10)
 
     # When

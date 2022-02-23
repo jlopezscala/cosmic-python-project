@@ -1,5 +1,6 @@
-from sqlalchemy import MetaData, Table, Column, Integer, String, Date, ForeignKey
+from sqlalchemy import MetaData, Table, Column, Integer, String, Date, ForeignKey, create_engine
 
+from src.allocation import config
 from src.allocation.domain import model
 
 from sqlalchemy.orm import mapper, relationship
@@ -11,7 +12,7 @@ order_lines = Table(
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("sku", String(255)),
-    Column("qty", Integer, nullable=False),
+    Column("quantity", Integer, nullable=False),
     Column("order_id", String(255)),
 )
 
@@ -41,7 +42,13 @@ def start_mappers():
         batches,
         properties={
             "_allocations": relationship(
-                lines_mapper, secondary=allocations, collection_class=set,
+                lines_mapper,
+                secondary=allocations,
+                collection_class=set,
             )
         },
     )
+
+
+engine = create_engine(config.get_postgres_uri())
+metadata.create_all(engine)
